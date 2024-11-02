@@ -1,0 +1,4 @@
+41a42,44
+> 		
+> 		if (process.env.PLAUSIBLE_DOMAIN && process.env.PLAUSIBLE_SCRIPT_URL)
+> 			script(async defer data-domain=process.env.PLAUSIBLE_DOMAIN src=process.env.PLAUSIBLE_SCRIPT_URL)

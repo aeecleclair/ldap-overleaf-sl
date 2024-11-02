@@ -28,6 +28,7 @@ COPY ldap-overleaf-sl/sharelatex/login.pug       /overleaf/services/web/app/view
 COPY ldap-overleaf-sl/sharelatex/register.pug       /overleaf/services/web/app/views/user/
 COPY ldap-overleaf-sl/sharelatex/navbar-website-redesign.pug      /overleaf/services/web/app/views/layout/
 COPY ldap-overleaf-sl/sharelatex/navbar-marketing.pug      /overleaf/services/web/app/views/layout/
+COPY ldap-overleaf-sl/sharelatex/layout-base.pug      /overleaf/services/web/app/views/
 
 # Non LDAP User Registration for Admins
 COPY ldap-overleaf-sl/sharelatex/admin-index.pug     /overleaf/services/web/app/views/admin/index.pug

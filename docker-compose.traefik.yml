@@ -195,6 +195,10 @@ services:
       # Enables Thumbnail generation using ImageMagick
       ENABLE_CONVERSIONS: "true"
 
+      # Plausible Analytics
+      #PLAUSIBLE_DOMAIN: $MYDOMAIN
+      #PLAUSIBLE_SCRIPT_URL: ""
+
   mongo:
     restart: always
     image: mongo:5.0

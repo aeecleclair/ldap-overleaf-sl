@@ -14,6 +14,7 @@ CONTAINER_FILE_PATHS=(
     "/overleaf/services/web/app/views/layout/navbar-marketing.pug"
     "/overleaf/services/web/app/views/admin/index.pug"
     "/overleaf/services/web/app/views/admin/index.pug"
+    "/overleaf/services/web/app/views/layout-base.pug"
     "/overleaf/services/web/app/src/Features/Project/ProjectCreationHandler.js"
 )
 
@@ -29,6 +30,7 @@ FILENAMES=(
     "navbar-marketing.pug"
     "admin-index.pug"
     "admin-sysadmin.pug"
+    "layout-base.pug"
     "ProjectCreationHandler.js"
 )
 
