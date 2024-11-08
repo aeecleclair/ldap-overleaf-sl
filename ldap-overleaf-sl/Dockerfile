@@ -20,6 +20,7 @@ COPY ldap-overleaf-sl/sharelatex/AuthenticationManager.js    /overleaf/services/
 COPY ldap-overleaf-sl/sharelatex/AuthenticationController.js /overleaf/services/web/app/src/Features/Authentication/
 COPY ldap-overleaf-sl/sharelatex/ContactController.js        /overleaf/services/web/app/src/Features/Contacts/
 COPY ldap-overleaf-sl/sharelatex/router.js                   /overleaf/services/web/app/src/router.js
+COPY ldap-overleaf-sl/sharelatex/CSP.js   /overleaf/services/web/app/src/infrastructure/
 COPY ldap-overleaf-sl/sharelatex/ProjectCreationHandler.js   /overleaf/services/web/app/src/Features/Project/
 
 # Too much changes to do inline (>10 Lines).
