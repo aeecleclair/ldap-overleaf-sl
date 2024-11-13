@@ -80,9 +80,11 @@ const buildViewPolicy = (
   reportUri,
   viewDirectives
 ) => {
-  const scriptSrc = `'nonce-${scriptNonce}' 'unsafe-inline' 'strict-dynamic' https: 'report-sample'`;
+  let scriptSrc = "";
   if (process.env.PLAUSIBLE_SCRIPT_URL) {
-    scriptSrc += ` '${process.env.PLAUSIBLE_SCRIPT_URL}'`;
+    scriptSrc = `${process.env.PLAUSIBLE_SCRIPT_URL} 'nonce-${scriptNonce}' 'unsafe-inline'`;
+  } else {
+    scriptSrc = `'nonce-${scriptNonce}' 'unsafe-inline' 'strict-dynamic' https: 'report-sample'`;
   }
 
   const directives = [

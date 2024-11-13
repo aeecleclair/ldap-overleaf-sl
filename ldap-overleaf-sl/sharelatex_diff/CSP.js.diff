@@ -1,173 +1,144 @@
---- ldap-overleaf-sl/sharelatex_ori/CSP.js	2024-08-08 11:39:58
-+++ ldap-overleaf-sl/sharelatex/CSP.js	2024-11-08 21:01:59
-@@ -1,5 +1,5 @@
--const crypto = require('crypto')
--const path = require('path')
-+const crypto = require("crypto");
-+const path = require("path");
- 
- module.exports = function ({
-   reportUri,
-@@ -9,49 +9,49 @@
-   viewDirectives = {},
- }) {
-   const header = reportOnly
--    ? 'Content-Security-Policy-Report-Only'
--    : 'Content-Security-Policy'
-+    ? "Content-Security-Policy-Report-Only"
-+    : "Content-Security-Policy";
- 
--  const defaultPolicy = buildDefaultPolicy(reportUri)
-+  const defaultPolicy = buildDefaultPolicy(reportUri);
- 
-   return function (req, res, next) {
-     // set the default policy
--    res.set(header, defaultPolicy)
-+    res.set(header, defaultPolicy);
- 
--    const originalRender = res.render
-+    const originalRender = res.render;
- 
-     res.render = (...args) => {
--      const view = relativeViewPath(args[0])
-+      const view = relativeViewPath(args[0]);
- 
-       if (exclude.includes(view)) {
-         // remove the default policy
--        res.removeHeader(header)
-+        res.removeHeader(header);
-       } else {
-         // set the view policy
--        res.locals.cspEnabled = true
-+        res.locals.cspEnabled = true;
- 
--        const scriptNonce = crypto.randomBytes(16).toString('base64')
-+        const scriptNonce = crypto.randomBytes(16).toString("base64");
- 
--        res.locals.scriptNonce = scriptNonce
-+        res.locals.scriptNonce = scriptNonce;
- 
-         const policy = buildViewPolicy(
-           scriptNonce,
-           reportPercentage,
-           reportUri,
-           viewDirectives[view]
--        )
-+        );
- 
-         // Note: https://csp-evaluator.withgoogle.com/ is useful for checking the policy
- 
--        res.set(header, policy)
-+        res.set(header, policy);
-       }
- 
--      originalRender.apply(res, args)
--    }
-+      originalRender.apply(res, args);
-+    };
- 
--    next()
--  }
--}
-+    next();
-+  };
-+};
- 
- const buildDefaultPolicy = (reportUri, styleSrc) => {
-   const directives = [
-@@ -60,19 +60,19 @@
-     `form-action 'none'`, // forbid setting a form action
-     `frame-ancestors 'none'`, // forbid loading embedded content
-     `img-src 'self'`, // allow loading images from the same domain (e.g. the favicon).
--  ]
-+  ];
- 
-   if (reportUri) {
--    directives.push(`report-uri ${reportUri}`)
-+    directives.push(`report-uri ${reportUri}`);
-     // NOTE: implement report-to once it's more widely supported
-   }
- 
-   if (styleSrc) {
--    directives.push(`style-src ${styleSrc}`)
-+    directives.push(`style-src ${styleSrc}`);
-   }
- 
--  return directives.join('; ')
--}
-+  return directives.join("; ");
-+};
- 
- const buildViewPolicy = (
-   scriptNonce,
-@@ -80,38 +80,43 @@
-   reportUri,
-   viewDirectives
- ) => {
-+  const scriptSrc = `'nonce-${scriptNonce}' 'unsafe-inline' 'strict-dynamic' https: 'report-sample'`;
-+  if (process.env.PLAUSIBLE_SCRIPT_URL) {
-+    scriptSrc += ` '${process.env.PLAUSIBLE_SCRIPT_URL}'`;
-+  }
-+
-   const directives = [
--    `script-src 'nonce-${scriptNonce}' 'unsafe-inline' 'strict-dynamic' https: 'report-sample'`, // only allow scripts from certain sources
-+    `script-src ${scriptSrc}`, // only allow scripts from certain sources
-     `object-src 'none'`, // forbid loading an "object" element
-     `base-uri 'none'`, // forbid setting a "base" element
-     ...(viewDirectives ?? []),
--  ]
-+  ];
- 
-   if (reportUri) {
-     // enable the report URI for a percentage of CSP-enabled requests
--    const belowReportCutoff = Math.random() * 100 <= reportPercentage
-+    const belowReportCutoff = Math.random() * 100 <= reportPercentage;
- 
-     if (belowReportCutoff) {
--      directives.push(`report-uri ${reportUri}`)
-+      directives.push(`report-uri ${reportUri}`);
-       // NOTE: implement report-to once it's more widely supported
-     }
-   }
- 
--  return directives.join('; ')
--}
-+  return directives.join("; ");
-+};
- 
--const webRoot = path.resolve(__dirname, '..', '..', '..')
-+const webRoot = path.resolve(__dirname, "..", "..", "..");
- 
- // build the view path relative to the web root
- function relativeViewPath(view) {
-   return path.isAbsolute(view)
-     ? path.relative(webRoot, view)
--    : path.join('app', 'views', view)
-+    : path.join("app", "views", view);
- }
- 
- function removeCSPHeaders(res) {
--  res.removeHeader('Content-Security-Policy')
--  res.removeHeader('Content-Security-Policy-Report-Only')
-+  res.removeHeader("Content-Security-Policy");
-+  res.removeHeader("Content-Security-Policy-Report-Only");
- }
- 
- /**
-@@ -120,11 +125,11 @@
-  */
- function allowUnsafeInlineStyles(res) {
-   res.set(
--    'Content-Security-Policy',
-+    "Content-Security-Policy",
-     buildDefaultPolicy(undefined, "'unsafe-inline'")
--  )
-+  );
- }
- 
--module.exports.buildDefaultPolicy = buildDefaultPolicy
--module.exports.removeCSPHeaders = removeCSPHeaders
--module.exports.allowUnsafeInlineStyles = allowUnsafeInlineStyles
-+module.exports.buildDefaultPolicy = buildDefaultPolicy;
-+module.exports.removeCSPHeaders = removeCSPHeaders;
-+module.exports.allowUnsafeInlineStyles = allowUnsafeInlineStyles;
+1,2c1,2
+< const crypto = require('crypto')
+< const path = require('path')
+---
+> const crypto = require("crypto");
+> const path = require("path");
+12,13c12,13
+<     ? 'Content-Security-Policy-Report-Only'
+<     : 'Content-Security-Policy'
+---
+>     ? "Content-Security-Policy-Report-Only"
+>     : "Content-Security-Policy";
+15c15
+<   const defaultPolicy = buildDefaultPolicy(reportUri)
+---
+>   const defaultPolicy = buildDefaultPolicy(reportUri);
+19c19
+<     res.set(header, defaultPolicy)
+---
+>     res.set(header, defaultPolicy);
+21c21
+<     const originalRender = res.render
+---
+>     const originalRender = res.render;
+24c24
+<       const view = relativeViewPath(args[0])
+---
+>       const view = relativeViewPath(args[0]);
+28c28
+<         res.removeHeader(header)
+---
+>         res.removeHeader(header);
+31c31
+<         res.locals.cspEnabled = true
+---
+>         res.locals.cspEnabled = true;
+33c33
+<         const scriptNonce = crypto.randomBytes(16).toString('base64')
+---
+>         const scriptNonce = crypto.randomBytes(16).toString("base64");
+35c35
+<         res.locals.scriptNonce = scriptNonce
+---
+>         res.locals.scriptNonce = scriptNonce;
+42c42
+<         )
+---
+>         );
+46c46
+<         res.set(header, policy)
+---
+>         res.set(header, policy);
+49,50c49,50
+<       originalRender.apply(res, args)
+<     }
+---
+>       originalRender.apply(res, args);
+>     };
+52,54c52,54
+<     next()
+<   }
+< }
+---
+>     next();
+>   };
+> };
+63c63
+<   ]
+---
+>   ];
+66c66
+<     directives.push(`report-uri ${reportUri}`)
+---
+>     directives.push(`report-uri ${reportUri}`);
+71c71
+<     directives.push(`style-src ${styleSrc}`)
+---
+>     directives.push(`style-src ${styleSrc}`);
+74,75c74,75
+<   return directives.join('; ')
+< }
+---
+>   return directives.join("; ");
+> };
+82a83,89
+>   let scriptSrc = "";
+>   if (process.env.PLAUSIBLE_SCRIPT_URL) {
+>     scriptSrc = `${process.env.PLAUSIBLE_SCRIPT_URL} 'nonce-${scriptNonce}' 'unsafe-inline'`;
+>   } else {
+>     scriptSrc = `'nonce-${scriptNonce}' 'unsafe-inline' 'strict-dynamic' https: 'report-sample'`;
+>   }
+> 
+84c91
+<     `script-src 'nonce-${scriptNonce}' 'unsafe-inline' 'strict-dynamic' https: 'report-sample'`, // only allow scripts from certain sources
+---
+>     `script-src ${scriptSrc}`, // only allow scripts from certain sources
+88c95
+<   ]
+---
+>   ];
+92c99
+<     const belowReportCutoff = Math.random() * 100 <= reportPercentage
+---
+>     const belowReportCutoff = Math.random() * 100 <= reportPercentage;
+95c102
+<       directives.push(`report-uri ${reportUri}`)
+---
+>       directives.push(`report-uri ${reportUri}`);
+100,101c107,108
+<   return directives.join('; ')
+< }
+---
+>   return directives.join("; ");
+> };
+103c110
+< const webRoot = path.resolve(__dirname, '..', '..', '..')
+---
+> const webRoot = path.resolve(__dirname, "..", "..", "..");
+109c116
+<     : path.join('app', 'views', view)
+---
+>     : path.join("app", "views", view);
+113,114c120,121
+<   res.removeHeader('Content-Security-Policy')
+<   res.removeHeader('Content-Security-Policy-Report-Only')
+---
+>   res.removeHeader("Content-Security-Policy");
+>   res.removeHeader("Content-Security-Policy-Report-Only");
+123c130
+<     'Content-Security-Policy',
+---
+>     "Content-Security-Policy",
+125c132
+<   )
+---
+>   );
+128,130c135,137
+< module.exports.buildDefaultPolicy = buildDefaultPolicy
+< module.exports.removeCSPHeaders = removeCSPHeaders
+< module.exports.allowUnsafeInlineStyles = allowUnsafeInlineStyles
+---
+> module.exports.buildDefaultPolicy = buildDefaultPolicy;
+> module.exports.removeCSPHeaders = removeCSPHeaders;
+> module.exports.allowUnsafeInlineStyles = allowUnsafeInlineStyles;
