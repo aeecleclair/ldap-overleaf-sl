@@ -20,7 +20,6 @@ COPY ldap-overleaf-sl/sharelatex/AuthenticationManager.js    /overleaf/services/
 COPY ldap-overleaf-sl/sharelatex/AuthenticationController.js /overleaf/services/web/app/src/Features/Authentication/
 COPY ldap-overleaf-sl/sharelatex/ContactController.js        /overleaf/services/web/app/src/Features/Contacts/
 COPY ldap-overleaf-sl/sharelatex/router.js                   /overleaf/services/web/app/src/router.js
-COPY ldap-overleaf-sl/sharelatex/CSP.js   /overleaf/services/web/app/src/infrastructure/
 COPY ldap-overleaf-sl/sharelatex/ProjectCreationHandler.js   /overleaf/services/web/app/src/Features/Project/
 
 # Too much changes to do inline (>10 Lines).
@@ -29,7 +28,6 @@ COPY ldap-overleaf-sl/sharelatex/login.pug       /overleaf/services/web/app/view
 COPY ldap-overleaf-sl/sharelatex/register.pug       /overleaf/services/web/app/views/user/
 COPY ldap-overleaf-sl/sharelatex/navbar-website-redesign.pug      /overleaf/services/web/app/views/layout/
 COPY ldap-overleaf-sl/sharelatex/navbar-marketing.pug      /overleaf/services/web/app/views/layout/
-COPY ldap-overleaf-sl/sharelatex/layout-base.pug      /overleaf/services/web/app/views/
 
 # Non LDAP User Registration for Admins
 COPY ldap-overleaf-sl/sharelatex/admin-index.pug     /overleaf/services/web/app/views/admin/index.pug
