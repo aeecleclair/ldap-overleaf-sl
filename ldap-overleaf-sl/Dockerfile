@@ -8,6 +8,14 @@ ARG collab_text
 ARG login_text   
 ARG admin_is_sysadmin
 
+#-----------Security fixes --------------
+# strip any hardcoded flag, then disable shell-escape + lock file access
+# (top-level texmf.cnf overrides texmf-dist defaults)
+RUN sed -i "s/'-shell-escape', *//g" /overleaf/services/clsi/app/js/LatexRunner.js \
+ && printf 'shell_escape = f\nopenin_any = p\nopenout_any = p\n' >> /usr/local/texlive/2024/texmf.cnf
+
+#----------------------------------------
+
 # set workdir (might solve issue #2 - see https://stackoverflow.com/questions/57534295/)
 WORKDIR /overleaf/services/web
 
@@ -35,14 +43,15 @@ COPY ldap-overleaf-sl/sharelatex/admin-sysadmin.pug  /tmp/admin-sysadmin.pug
 
     ## comment out this line to prevent sed accidently remove the brackets of the email(username) field
     # sed -iE '/email@example.com/{n;N;N;d}' /overleaf/services/web/app/views/user/login.pug && \
-RUN sed -iE "s/email@example.com/${login_text:-user}/g" /overleaf/services/web/app/views/user/login.pug && \
+RUN sed -i "s/email@example.com/${login_text:-user}/g" /overleaf/services/web/app/views/user/login.pug && \
     ## Collaboration settings display (share project placeholder) | edit line 146
     ## share.pug file was removed in later versions
-    # sed -iE "s%placeholder=.*$%placeholder=\"${collab_text}\"%g" /overleaf/services/web/app/views/project/editor/share.pug && \
+    # sed -i "s%placeholder=.*$%placeholder=\"${collab_text}\"%g" /overleaf/services/web/app/views/project/editor/share.pug && \
     ## extend pdflatex with option shell-esacpe ( fix for closed overleaf/overleaf/issues/217 and overleaf/docker-image/issues/45 )
     ## do this in different ways for different sharelatex versions
-    sed -iE "s%-synctex=1\",%-synctex=1\", \"-shell-escape\",%g" /overleaf/services/clsi/app/js/LatexRunner.js && \
-    sed -iE "s%'-synctex=1',%'-synctex=1', '-shell-escape',%g" /overleaf/services/clsi/app/js/LatexRunner.js && \
+    ## DISABLED for security (see security fixes above) - shell-escape allows arbitrary command execution
+    # sed -iE "s%-synctex=1\",%-synctex=1\", \"-shell-escape\",%g" /overleaf/services/clsi/app/js/LatexRunner.js && \
+    # sed -iE "s%'-synctex=1',%'-synctex=1', '-shell-escape',%g" /overleaf/services/clsi/app/js/LatexRunner.js && \
     if [ "${admin_is_sysadmin}" = "true" ] ; \
         then cp /tmp/admin-sysadmin.pug /overleaf/services/web/app/views/admin/index.pug ; \
         else rm /tmp/admin-sysadmin.pug ; \
